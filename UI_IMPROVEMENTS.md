@@ -71,7 +71,7 @@ Add visual celebration when marking tasks as done.
 - Sound effect (optional, with mute toggle)
 
 ### 3. Better Drag Preview
-- [ ] **Status:** Not implemented
+- [x] **Status:** ✅ Implemented
 
 Enhance the visual feedback during drag-and-drop.
 
@@ -79,6 +79,14 @@ Enhance the visual feedback during drag-and-drop.
 - Add `transform: scale(1.02)` and shadow when dragging starts
 - Show insertion line indicator between tasks (thin colored line)
 - Maintain better opacity (current 0.5 might be too faint)
+
+**Implementation details:**
+- Increased opacity from `0.5` to `0.6` for better visibility while dragging
+- Added `transform: scale(1.02) rotate(1deg)` for dynamic lift effect
+- Added glowing box-shadow with accent color border
+- Created animated insertion line indicators (`.drag-over-top` and `.drag-over-bottom`)
+- Insertion line uses gradient (accent → accent-2) with pulse animation
+- Enhanced JavaScript to track and show/hide indicators dynamically
 
 ### 4. Progress Visualization
 - [ ] **Status:** Not implemented
@@ -256,7 +264,7 @@ Make shortcuts discoverable.
 
 **Recommended priority order:**
 - [x] **Better glass card opacity** (#1) - 5 min ✅ Implemented
-- [ ] **Drag preview improvements** (#3) - 15 min
+- [x] **Drag preview improvements** (#3) - 15 min ✅ Implemented
 - [ ] **Progress bar** (#4) - 20 min
 - [ ] **Clear completed button** (#7) - 10 min
 - [ ] **Enhanced empty state** (#8) - 15 min
