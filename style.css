@@ -199,12 +199,39 @@ body {
 }
 
 .task-item.dragging {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: grabbing;
+  transform: scale(1.02) rotate(1deg);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.45), 0 0 0 1px rgba(96, 165, 250, 0.3);
+  z-index: 100;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-item.drag-over-top::before,
+.task-item.drag-over-bottom::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
+  border-radius: 999px;
+  box-shadow: 0 0 6px rgba(96, 165, 250, 0.6);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.task-item.drag-over-top::before {
+  top: -1px;
+}
+
+.task-item.drag-over-bottom::after {
+  bottom: -1px;
 }
 
 .task-item {
   cursor: grab;
+  position: relative;
 }
 
 .task-item:active {

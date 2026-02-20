@@ -70,6 +70,8 @@ export function renderTasks(tasks) {
 export function setupDragAndDrop(onReorder) {
   let draggedElement = null;
   let sourceList = null;
+  let lastIndicatorElement = null;
+  let lastIndicatorClass = null;
 
   document.body.addEventListener("dragstart", (event) => {
     const taskItem = event.target.closest(".task-item");
@@ -86,25 +88,59 @@ export function setupDragAndDrop(onReorder) {
     if (taskItem) {
       taskItem.classList.remove("dragging");
     }
+    
+    // Clean up any drag-over indicators
+    document.querySelectorAll(".drag-over-top, .drag-over-bottom").forEach((el) => {
+      el.classList.remove("drag-over-top", "drag-over-bottom");
+    });
+    
     draggedElement = null;
     sourceList = null;
+    lastIndicatorElement = null;
+    lastIndicatorClass = null;
   });
 
   document.body.addEventListener("dragover", (event) => {
     event.preventDefault();
     const taskItem = event.target.closest(".task-item");
-    if (!taskItem || !draggedElement || taskItem === draggedElement) return;
+    
+    if (!taskItem || !draggedElement || taskItem === draggedElement) {
+      // Clean up indicators if not over a valid target
+      if (lastIndicatorElement) {
+        lastIndicatorElement.classList.remove("drag-over-top", "drag-over-bottom");
+        lastIndicatorElement = null;
+        lastIndicatorClass = null;
+      }
+      return;
+    }
 
     const list = taskItem.parentElement;
     if (list !== sourceList) return;
 
     const rect = taskItem.getBoundingClientRect();
     const midpoint = rect.top + rect.height / 2;
+    const isTop = event.clientY < midpoint;
+    const indicatorClass = isTop ? "drag-over-top" : "drag-over-bottom";
     
-    if (event.clientY < midpoint) {
-      list.insertBefore(draggedElement, taskItem);
-    } else {
-      list.insertBefore(draggedElement, taskItem.nextSibling);
+    // Check if we need to update indicator or position
+    const indicatorChanged = lastIndicatorElement !== taskItem || lastIndicatorClass !== indicatorClass;
+    
+    if (!indicatorChanged) {
+      return; // Nothing changed, skip update
+    }
+    
+    // Update indicator
+    if (lastIndicatorElement) {
+      lastIndicatorElement.classList.remove("drag-over-top", "drag-over-bottom");
+    }
+    taskItem.classList.add(indicatorClass);
+    lastIndicatorElement = taskItem;
+    lastIndicatorClass = indicatorClass;
+    
+    // Move element only if needed
+    const targetSibling = isTop ? taskItem : taskItem.nextSibling;
+    if (draggedElement.nextSibling !== targetSibling) {
+      list.insertBefore(draggedElement, targetSibling);
     }
   });
 
@@ -116,6 +152,11 @@ export function setupDragAndDrop(onReorder) {
       (item) => item.dataset.id
     );
     onReorder(newOrder, sourceList.id);
+    
+    // Clean up indicators
+    document.querySelectorAll(".drag-over-top, .drag-over-bottom").forEach((el) => {
+      el.classList.remove("drag-over-top", "drag-over-bottom");
+    });
   });
 }
 
