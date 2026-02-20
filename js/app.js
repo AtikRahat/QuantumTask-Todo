@@ -5,9 +5,10 @@ import {
   getRolledOverTasks,
   getTasks,
   setTasks,
-  toggleTask
+  toggleTask,
+  reorderTasks
 } from "./tasks.js";
-import { activateTaskItem, renderTasks, startInlineEdit } from "./ui.js";
+import { activateTaskItem, renderTasks, startInlineEdit, setupDragAndDrop } from "./ui.js";
 import { registerShortcuts } from "./shortcuts.js";
 
 let tasks = [];
@@ -178,6 +179,10 @@ async function bootstrap() {
 
   renderTasks(tasks);
   bindEvents();
+  setupDragAndDrop(async (newOrder, listId) => {
+    const nextTasks = reorderTasks(tasks, newOrder, listId);
+    await commitAndRender(nextTasks);
+  });
 }
 
 bootstrap();

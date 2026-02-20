@@ -77,18 +77,33 @@ export function getRolledOverTasks(tasks) {
   };
 }
 
+export function reorderTasks(tasks, newOrder, listId) {
+  if (listId === "overdue-list") {
+    const overdue = tasks.filter((task) => !task.done && task.overdue);
+    const rest = tasks.filter((task) => task.done || !task.overdue);
+    const reordered = newOrder.map((id) => overdue.find((t) => t.id === id)).filter(Boolean);
+    return [...reordered, ...rest];
+  }
+
+  if (listId === "today-list") {
+    const today = tasks.filter((task) => !task.overdue);
+    const overdue = tasks.filter((task) => task.overdue && !task.done);
+    const reordered = newOrder.map((id) => today.find((t) => t.id === id)).filter(Boolean);
+    return [...overdue, ...reordered];
+  }
+
+  return tasks;
+}
+
 export function splitForRender(tasks) {
   const overdue = tasks
-    .filter((task) => !task.done && task.overdue)
-    .sort((a, b) => b.createdAt - a.createdAt);
+    .filter((task) => !task.done && task.overdue);
 
   const todayActive = tasks
-    .filter((task) => !task.done && !task.overdue)
-    .sort((a, b) => b.createdAt - a.createdAt);
+    .filter((task) => !task.done && !task.overdue);
 
   const completed = tasks
-    .filter((task) => task.done)
-    .sort((a, b) => b.createdAt - a.createdAt);
+    .filter((task) => task.done);
 
   return { overdue, today: [...todayActive, ...completed] };
 }

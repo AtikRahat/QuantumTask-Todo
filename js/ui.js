@@ -5,6 +5,7 @@ function makeTaskItem(task) {
   item.className = `task-item${task.done ? " done" : ""}${task.overdue ? " overdue" : ""}`;
   item.dataset.id = task.id;
   item.tabIndex = 0;
+  item.draggable = true;
 
   const check = document.createElement("button");
   check.className = "task-check";
@@ -64,6 +65,58 @@ export function renderTasks(tasks) {
   emptyState.classList.toggle("hidden", tasks.length > 0);
   todayCount.textContent = String(activeCount);
   doneCount.textContent = String(completedCount);
+}
+
+export function setupDragAndDrop(onReorder) {
+  let draggedElement = null;
+  let sourceList = null;
+
+  document.body.addEventListener("dragstart", (event) => {
+    const taskItem = event.target.closest(".task-item");
+    if (!taskItem) return;
+
+    draggedElement = taskItem;
+    sourceList = taskItem.parentElement;
+    taskItem.classList.add("dragging");
+    event.dataTransfer.effectAllowed = "move";
+  });
+
+  document.body.addEventListener("dragend", (event) => {
+    const taskItem = event.target.closest(".task-item");
+    if (taskItem) {
+      taskItem.classList.remove("dragging");
+    }
+    draggedElement = null;
+    sourceList = null;
+  });
+
+  document.body.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    const taskItem = event.target.closest(".task-item");
+    if (!taskItem || !draggedElement || taskItem === draggedElement) return;
+
+    const list = taskItem.parentElement;
+    if (list !== sourceList) return;
+
+    const rect = taskItem.getBoundingClientRect();
+    const midpoint = rect.top + rect.height / 2;
+    
+    if (event.clientY < midpoint) {
+      list.insertBefore(draggedElement, taskItem);
+    } else {
+      list.insertBefore(draggedElement, taskItem.nextSibling);
+    }
+  });
+
+  document.body.addEventListener("drop", (event) => {
+    event.preventDefault();
+    if (!sourceList) return;
+
+    const newOrder = Array.from(sourceList.querySelectorAll(".task-item")).map(
+      (item) => item.dataset.id
+    );
+    onReorder(newOrder, sourceList.id);
+  });
 }
 
 export function activateTaskItem(id) {

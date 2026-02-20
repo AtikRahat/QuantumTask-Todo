@@ -197,6 +197,19 @@ body {
   border-color: rgba(245, 158, 11, 0.58);
 }
 
+.task-item.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.task-item {
+  cursor: grab;
+}
+
+.task-item:active {
+  cursor: grabbing;
+}
+
 .task-check {
   width: 18px;
   height: 18px;
