@@ -1,5 +1,48 @@
 # UI Improvement Suggestions for QuantumTask-Todo
 
+## ✅ Implemented in feature/glass-card-opacity Branch
+
+### Visual Enhancements (Completed)
+
+1. **Glass Card Opacity** ✅
+   - Increased `--color-card` from `0.08` to `0.15` for better readability
+   - Increased `--color-card-hover` from `0.12` to `0.18`
+   - Increased blur from `14px` to `20px` for softer glass effect
+
+2. **Task Readability** ✅
+   - Increased line-height from `1.35` to `1.5` for better reading
+   - 2-line wrap already supported via `line-clamp: 2`
+
+3. **Keyboard Affordance** ✅
+   - Enhanced `:focus-visible` rings from `2px` to `3px` width
+   - Added glow effect with `box-shadow` for better visibility
+   - Increased outline-offset from `2px` to `3px`
+
+4. **Overdue State Clarity** ✅
+   - Increased amber background from `0.1` to `0.12` opacity
+   - Existing border + tag already in place
+
+5. **Reduced Motion Support** ✅
+   - Improved `prefers-reduced-motion` to disable gradient animation
+   - Falls back to solid background color
+   - Minimal animation duration for essential feedback
+
+6. **Responsive Behavior** ✅  
+   - Desktop breakpoint (@1280px+) with larger spacing
+   - Mobile breakpoint (@max-width: 900px) for stacking
+   - Already implemented in base version
+
+7. **Empty State Guidance** ✅
+   - "No tasks yet — press N to start" message already exists
+   - Shows when task list is empty
+
+8. **Keyboard Shortcuts Discovery** ✅
+   - Expanded shortcuts display: ⌨ N · Enter · Space · Del
+   - Tooltip shows full descriptions
+   - More informative than previous "Press N to focus input"
+
+---
+
 ## Immediate Visual Polish
 
 ### 1. Increase Glass Card Opacity

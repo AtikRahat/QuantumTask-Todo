@@ -183,8 +183,9 @@ body {
 .task-check:focus-visible,
 .delete-btn:focus-visible,
 .task-edit:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(96, 165, 250, 0.2);
 }
 
 .task-item.done .task-text {
@@ -193,7 +194,7 @@ body {
 }
 
 .task-item.overdue {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(245, 158, 11, 0.12);
   border-color: rgba(245, 158, 11, 0.58);
 }
 
@@ -239,7 +240,7 @@ body {
   line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  line-height: 1.35;
+  line-height: 1.5;
   user-select: none;
 }
 
@@ -362,7 +363,13 @@ body {
   *,
   *::before,
   *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  body {
     animation: none !important;
-    transition: none !important;
+    background: var(--color-bg-2);
   }
 }
